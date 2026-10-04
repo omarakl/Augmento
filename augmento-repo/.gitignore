@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+build_env/
+venv/
+.venv/
+
+# PyInstaller and installer output
+build/
+dist/
+installer/
+*.spec
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

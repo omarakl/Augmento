@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Augmentation methods in Augmento</title>
+<meta name="description" content="See what each of the 25 Augmento augmentation methods does, with before and after examples.">
+<style>
+:root {
+  --forest: #123524;
+  --green: #1f7a49;
+  --leaf: #3aa96a;
+  --paper: #f5f8f4;
+  --ink: #1b2a22;
+  --muted: #5a6b61;
+  --line: #d6e0d8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1rem/1.65 system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+a { color: var(--green); }
+a:focus-visible, .chip:focus-visible { outline: 3px solid var(--leaf); outline-offset: 3px; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+/* Header, same as the main page */
+.hero { background: var(--forest); color: #eaf3ec; padding-bottom: 44px; }
+nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+.brand { font: 700 1.6rem "Trebuchet MS", system-ui, sans-serif; color: #7fd6a0; text-decoration: none; }
+nav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }
+nav ul a { color: #cfe3d5; text-decoration: none; }
+nav ul a:hover { color: #fff; text-decoration: underline; }
+nav ul a[aria-current] { color: #fff; font-weight: 700; }
+.hero h1 {
+  font: 700 clamp(2rem, 5vw, 3rem)/1.15 "Trebuchet MS", system-ui, sans-serif;
+  max-width: 17em; margin: 32px 0 14px;
+}
+.hero .lead { max-width: 38em; font-size: 1.1rem; color: #bcd5c4; margin: 0; }
+
+/* Page body */
+main { padding-top: 48px; }
+h2 { font: 700 1.7rem/1.25 "Trebuchet MS", system-ui, sans-serif; margin: 0 0 10px; color: var(--forest); }
+.intro { max-width: 40em; color: var(--muted); margin: 0 0 24px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.chip {
+  font: inherit; padding: 6px 16px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+}
+.chip:hover { border-color: var(--green); }
+.chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: #fff; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+.card[hidden] { display: none; }
+.card h3 { margin: 0; font: 700 1.15rem "Trebuchet MS", system-ui, sans-serif; color: var(--forest); }
+.card .tag { margin: 2px 0 0; font-size: .85rem; color: var(--green); }
+.card .tag.off { color: #8a5a00; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+.pair figure { margin: 0; }
+.pair img, .pair .frame { display: block; width: 100%; height: auto; border-radius: 6px; background: #e6ede8; }
+.pair figcaption { margin-top: 4px; font-size: .8rem; color: var(--muted); }
+.card p { margin: 0; }
+
+/* CSS-drawn sample for Cutout (no screenshot available) */
+.frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+.pic {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 26% 28%, #ffd166 0 11%, transparent 12%),
+    radial-gradient(ellipse at 72% 112%, #2e8b57 0 46%, transparent 47%),
+    radial-gradient(ellipse at 18% 118%, #1c6a40 0 42%, transparent 43%),
+    linear-gradient(#8fcbe0, #e6f4ec);
+}
+.frame.cut::after { content: ""; position: absolute; left: 52%; top: 14%; width: 30%; height: 30%; background: #000; }
+
+/* Dataset tools */
+section { padding-top: 64px; }
+.group { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 26px 0; border-top: 1px solid var(--line); }
+.group:last-of-type { border-bottom: 1px solid var(--line); }
+.group h3 { margin: 0; font: 700 1.15rem "Trebuchet MS", system-ui, sans-serif; color: var(--green); }
+.group p { margin: 0 0 10px; max-width: 42em; }
+.group p:last-child { margin-bottom: 0; }
+.table-box { overflow-x: auto; margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); }
+th, td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+th { background: #eaf1ec; font-size: .9rem; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; white-space: nowrap; color: var(--forest); }
+
+footer { margin-top: 72px; background: var(--forest); color: #bcd5c4; text-align: center; padding: 26px 16px; font-size: .9rem; }
+footer p { margin: 0 0 4px; }
+footer a { color: #7fd6a0; }
+
+@media (max-width: 760px) {
+  nav ul { gap: 14px; font-size: .95rem; }
+  .group { grid-template-columns: 1fr; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a class="brand" href="/">Augmento</a>
+      <ul>
+        <li><a href="/#versions">Versions</a></li>
+        <li><a href="/#whats-new">What's new in v2</a></li>
+        <li><a href="/explanation" aria-current="page">Examples</a></li>
+      </ul>
+    </nav>
+    <h1>See what each augmentation does.</h1>
+    <p class="lead">Every method in Augmento, shown on the same sample photo with a plain-language explanation of when it helps.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>Augmentation methods</h2>
+  <p class="intro">Version 2 renamed Motion Noise to Motion Blur and corrected the spelling of Gaussian and Perspective Warp. The example images below were made with earlier builds, so exact results vary run to run.</p>
+  <div class="filters" id="filters" role="group" aria-label="Filter by type"></div>
+  <div class="grid" id="grid"></div>
+  <noscript><p>Please enable JavaScript to see the list of methods.</p></noscript>
+
+  <section id="tools">
+    <h2>Dataset tools in version 2</h2>
+    <p class="intro">Two extra tabs prepare your folders before you augment them.</p>
+
+    <div class="group">
+      <h3>Rename</h3>
+      <div>
+        <p>Renames every image in a folder to 1.jpg, 2.jpg, 3.jpg and so on, so the last number is your image count.</p>
+        <p>Numbers follow natural order (2 before 10) and can be zero padded (001.jpg). Matching label files are renamed with their images, nothing is overwritten, and an optional rename_map.csv records the old names.</p>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Resize</h3>
+      <div>
+        <p>Resizes a whole folder to one size, such as 640x640 or 720x720, and saves the results in a new folder. Your originals are never changed.</p>
+        <div class="table-box">
+          <table>
+            <thead><tr><th>Mode</th><th>What it does</th><th>YOLO labels</th></tr></thead>
+            <tbody>
+              <tr><td>Stretch</td><td>Fills the exact size. Shapes can look squeezed or stretched.</td><td>Stay valid as they are.</td></tr>
+              <tr><td>Letterbox</td><td>Keeps the proportions and pads the empty space with gray.</td><td>Boxes are updated.</td></tr>
+              <tr><td>Center crop</td><td>Keeps the proportions and trims the edges that do not fit.</td><td>Boxes are updated, and boxes cut off at the edge are trimmed or dropped.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; Augmento. All rights reserved.</p>
+  <p>Contact: <a href="mailto:omar.aakl@hotmail.com">omar.aakl@hotmail.com</a></p>
+</footer>
+
+<script>
+const BASE = "https://github.com/omarakl/Arduino-smart-stick-for-blind-people/blob/main/images/";
+const MOVES = "Moves labels with the image";
+const OFF = "Not available with labels";
+// [name, type, image file (null = drawn in CSS), explanation, note]
+const METHODS = [
+  ["Rotation", "Geometric", "rotation.png", "Turns the image by a random angle, up to 45 degrees by default. Helps a model recognize tilted objects.", MOVES],
+  ["Flipping", "Geometric", "flipping.png", "Mirrors the image left to right. A cheap way to double your data when direction does not matter.", MOVES],
+  ["Random Cropping", "Geometric", "random_cropping.png", "Cuts out a random region and scales it back to the original size. Teaches the model to recognize partly visible objects.", MOVES],
+  ["Zooming", "Geometric", "zooming.png", "Magnifies the center of the image, like photographing the same object from closer.", MOVES],
+  ["Translation", "Geometric", "translation.png", "Shifts the image sideways or up and down, so objects are not always in the same place.", MOVES],
+  ["Shearing", "Geometric", "shearing.png", "Slants the image along one axis, as if viewed at an angle.", MOVES],
+  ["Perspective Warp", "Geometric", "perspective_wrap.png", "Moves the corners of the image to mimic a different camera angle.", MOVES],
+  ["Affine Transformation", "Geometric", "affine.png", "Combines scaling, rotation, shearing and shifting in one random transform.", MOVES],
+  ["Elastic Transformation", "Geometric", "elastic%20_transformation.png", "Bends the image with smooth local distortions, like stretching rubber. Common for medical and handwriting data.", OFF],
+  ["Brightness", "Color", "brightness.png", "Makes the image lighter or darker, simulating different lighting.", ""],
+  ["Contrast", "Color", "contrast.png", "Widens or narrows the gap between light and dark areas.", ""],
+  ["Saturation", "Color", "saturation.png", "Makes colors more vivid or more washed out.", ""],
+  ["Hue", "Color", "hue.png", "Shifts the overall color tone, for example moving greens toward blue.", ""],
+  ["Channel Shuffling", "Color", "channel_shuffling.png", "Swaps the red, green and blue channels at random, so the model does not rely on exact colors.", ""],
+  ["Channel Dropping", "Color", "channel_dropping.png", "Sets one color channel to zero. Useful when color should not decide the result.", ""],
+  ["Salt & Pepper", "Noise and blur", "salt_and_pepper.png", "Scatters random black and white pixels, like sensor errors or a damaged scan.", ""],
+  ["Gaussian Noise", "Noise and blur", "guassian_noise.png", "Adds smooth random grain to every pixel, like a low-light camera.", ""],
+  ["Speckle Noise", "Noise and blur", "speckle_noise.png", "Adds noise that grows with pixel brightness, common in ultrasound and radar images.", ""],
+  ["Motion Blur", "Noise and blur", "motion_noise.png", "Smears the image in one direction, as if the camera or the subject moved.", ""],
+  ["Gaussian Blur", "Noise and blur", "guassian_blur.png", "Softens the image and removes fine detail, like an out-of-focus shot.", ""],
+  ["Random Erasing", "Occlusion", "random_erasing.png", "Covers a random patch with random noise, so the model does not depend on one small area.", ""],
+  ["Cutout", "Occlusion", null, "Blacks out a random square patch, forcing the model to use the rest of the image.", ""],
+  ["Edge Detection", "Filters", "edge%20detection.png", "Keeps only outlines and removes most color and texture. Best used on a small share of images.", ""],
+  ["Embossing", "Filters", "embossing.png", "Gives a raised, relief-like look that stresses edges and texture.", ""],
+  ["Sharpening", "Filters", "sharpening.png", "Boosts edges and fine detail for a crisper look.", ""]
+];
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text) e.textContent = text;
+  return e;
+}
+
+function figure(caption, content) {
+  const f = el("figure");
+  f.append(content, el("figcaption", "", caption));
+  return f;
+}
+
+function photo(file, alt) {
+  const img = el("img");
+  img.src = BASE + file + "?raw=true";
+  img.alt = alt;
+  img.loading = "lazy";
+  return img;
+}
+
+function drawn(cut) {
+  const frame = el("div", "frame" + (cut ? " cut" : ""));
+  frame.append(el("div", "pic"));
+  frame.setAttribute("role", "img");
+  frame.setAttribute("aria-label", cut ? "Sample picture with a black square cut out" : "Sample picture");
+  return frame;
+}
+
+const grid = document.getElementById("grid");
+METHODS.forEach(([name, type, file, text, note]) => {
+  const card = el("article", "card");
+  card.dataset.type = type;
+  card.append(el("h3", "", name));
+  if (note) card.append(el("p", "tag" + (note === OFF ? " off" : ""), note));
+  const pair = el("div", "pair");
+  pair.append(
+    figure("Original", file ? photo("original_image.jpg", "Original image") : drawn(false)),
+    figure("Result", file ? photo(file, name + " applied to the image") : drawn(true))
+  );
+  card.append(pair, el("p", "", text));
+  grid.append(card);
+});
+
+const types = ["All", ...new Set(METHODS.map(m => m[1]))];
+const filters = document.getElementById("filters");
+types.forEach(t => {
+  const count = t === "All" ? METHODS.length : METHODS.filter(m => m[1] === t).length;
+  const b = el("button", "chip", t + " (" + count + ")");
+  b.type = "button";
+  b.setAttribute("aria-pressed", t === "All" ? "true" : "false");
+  b.addEventListener("click", () => {
+    filters.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+    grid.querySelectorAll(".card").forEach(c => { c.hidden = t !== "All" && c.dataset.type !== t; });
+  });
+  filters.append(b);
+});
+</script>
+</body>
+</html>
