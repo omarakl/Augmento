@@ -1,6 +1,6 @@
 # Augmento
 
-A desktop app that augments, renames and resizes image datasets for computer vision projects. Suitable for Researchers and Beginner Computer Vision Engineeers.
+A desktop app that augments, renames and resizes image datasets for computer vision projects. Suitable for Researchers and Beginner Computer Vision Engineers.
 
 Website and examples: https://augmento.pythonanywhere.com
 
